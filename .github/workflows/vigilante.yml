@@ -19,7 +19,7 @@ jobs:
     env:
       ORIGEN: Puerto de Santa Maria
       DESTINO: Madrid
-      FECHAS: "12/09/2026,13/09/2026"
+      FECHAS: "30/08/2026"
 
     steps:
       - uses: actions/checkout@v4

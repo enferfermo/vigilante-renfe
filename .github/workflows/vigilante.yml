@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 10
 
     env:
-      ORIGEN: Puerto de Santa Maria
+      ORIGEN: Puerto De Santa María
       DESTINO: Madrid
       FECHAS: "30/08/2026"
 

@@ -10,7 +10,10 @@ on:
 concurrency:
   group: vigilante-renfe
   cancel-in-progress: false
-
+      - name: Depurar CLI
+        run: |
+          cd renfe-bot
+          PYTHONPATH=./src python src/cli.py -o "$ORIGEN" -d "$DESTINO" --departure_date "$(echo $FECHAS | cut -d, -f1)"
 jobs:
   vigilar:
     runs-on: ubuntu-latest

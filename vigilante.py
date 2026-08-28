@@ -78,13 +78,19 @@ def buscar_trenes(fecha: str) -> dict[str, str]:
 
 # --- estado ------------------------------------------------------------------
 
-def cargar_estado() -> dict[str, str]:
+def cargar_estado() -> dict[str, str] | None:
+    """
+    None = no hay estado previo (primera ejecucion de verdad).
+    {}   = hubo ejecucion previa y no habia NINGUN tren disponible.
+    Distinguir los dos casos es critico: si se confunden, un trayecto que
+    empieza agotado nunca genera aviso porque cada run se cree el primero.
+    """
     if not STATE_FILE.exists():
-        return {}
+        return None
     try:
         return json.loads(STATE_FILE.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
-        return {}
+        return None
 
 
 def guardar_estado(estado: dict[str, str]) -> None:
@@ -117,7 +123,7 @@ def main() -> int:
         actual.update(buscar_trenes(fecha))
 
     # Primera ejecucion: solo fotografiamos, no avisamos de todo el catalogo.
-    if not anterior:
+    if anterior is None:
         guardar_estado(actual)
         print(f"Estado inicial guardado: {len(actual)} trenes disponibles.")
         return 0

@@ -44,10 +44,7 @@ jobs:
 
       # PASO TEMPORAL: ensena la salida cruda de la CLI en el log.
       # Borralo cuando confirmes que el scraping devuelve la tabla de trenes.
-      - name: Depurar CLI
-        run: |
-          cd renfe-bot
-          PYTHONPATH=./src python src/cli.py -o "Puerto de Santa María" -d "Madrid Pta. Atocha - Almudena Grandes" --departure_date 30/08/2026
+
 
       # La cache de Actions es inmutable por clave: se escribe con una clave
       # unica (run_id) y se recupera la mas reciente por prefijo.

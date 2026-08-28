@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 10
 
     env:
-      ORIGEN: Barcelona-sants
+      ORIGEN: Puerto de Santa María
       DESTINO: Madrid Pta. Atocha - Almudena Grandes
       FECHAS: "30/08/2026"
 

@@ -18,7 +18,7 @@ jobs:
 
     env:
       ORIGEN: Puerto De Santa María
-      DESTINO: Madrid
+      DESTINO: Madrid Pta. Atocha - Almudena Grandes
       FECHAS: "30/08/2026"
 
     steps:

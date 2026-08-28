@@ -2,9 +2,10 @@ name: Vigilante Renfe
 
 on:
   schedule:
-    # Cada 10 min. GitHub NO garantiza puntualidad: en horas punta se retrasa.
-    - cron: "*/10 * * * *"
-  workflow_dispatch: {}   # para lanzarlo a mano y depurar
+    # Minutos "raros" y desplazados de la hora en punto: los crons de GitHub se
+    # encolan y se descartan cuando hay carga, y la carga maxima es en :00.
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch: {}   # para lanzarlo a mano
 
 # Evita que se solapen dos ejecuciones si una va lenta.
 concurrency:
@@ -17,8 +18,8 @@ jobs:
     timeout-minutes: 10
 
     env:
-      ORIGEN: Puerto de Santa María
-      DESTINO: Madrid Pta. Atocha - Almudena Grandes
+      ORIGEN: Puerto De Santa María
+      DESTINO: Sevilla-Santa Justa
       FECHAS: "30/08/2026"
 
     steps:
@@ -41,10 +42,6 @@ jobs:
       # Se invoca como modulo (python -m) para no depender del PATH del runner.
       - name: Instalar navegador
         run: python -m playwright install --with-deps chromium
-
-      # PASO TEMPORAL: ensena la salida cruda de la CLI en el log.
-      # Borralo cuando confirmes que el scraping devuelve la tabla de trenes.
-
 
       # La cache de Actions es inmutable por clave: se escribe con una clave
       # unica (run_id) y se recupera la mas reciente por prefijo.

@@ -1,0 +1,61 @@
+name: Vigilante Renfe
+
+on:
+  schedule:
+    # Cada 10 min. GitHub NO garantiza puntualidad: en horas punta se retrasa.
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}   # para lanzarlo a mano y depurar
+
+# Evita que se solapen dos ejecuciones si una va lenta.
+concurrency:
+  group: vigilante-renfe
+  cancel-in-progress: false
+
+jobs:
+  vigilar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      ORIGEN: Madrid
+      DESTINO: Valladolid
+      FECHAS: "12/09/2026,13/09/2026"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clonar renfe-bot
+        run: git clone --depth 1 https://github.com/emartinez-dev/renfe-bot.git
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r renfe-bot/requirements.txt
+          playwright install --with-deps chromium
+
+      # La caché de Actions es inmutable por clave: se escribe con una clave
+      # unica (run_id) y se recupera la mas reciente por prefijo.
+      - name: Recuperar estado anterior
+        uses: actions/cache/restore@v4
+        with:
+          path: state.json
+          key: estado-renfe-${{ github.run_id }}
+          restore-keys: |
+            estado-renfe-
+
+      - name: Comprobar plazas
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python vigilante.py
+
+      - name: Guardar estado
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: state.json
+          key: estado-renfe-${{ github.run_id }}

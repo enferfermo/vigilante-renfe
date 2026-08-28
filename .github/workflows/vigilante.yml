@@ -38,18 +38,18 @@ jobs:
           pip install -r renfe-bot/requirements.txt
           pip install playwright
 
+      # Se invoca como modulo (python -m) para no depender del PATH del runner.
       - name: Instalar navegador
         run: python -m playwright install --with-deps chromium
 
-      - name: Depurar CLI            # ← pegas este bloque entero aquí
+      # PASO TEMPORAL: ensena la salida cruda de la CLI en el log.
+      # Borralo cuando confirmes que el scraping devuelve la tabla de trenes.
+      - name: Depurar CLI
         run: |
           cd renfe-bot
           PYTHONPATH=./src python src/cli.py -o "$ORIGEN" -d "$DESTINO" --departure_date "$(echo $FECHAS | cut -d, -f1)"
 
-      - name: Recuperar estado anterior
-        uses: actions/cache/restore@v4
-
-      # La caché de Actions es inmutable por clave: se escribe con una clave
+      # La cache de Actions es inmutable por clave: se escribe con una clave
       # unica (run_id) y se recupera la mas reciente por prefijo.
       - name: Recuperar estado anterior
         uses: actions/cache/restore@v4

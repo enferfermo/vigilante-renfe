@@ -47,7 +47,7 @@ jobs:
       - name: Depurar CLI
         run: |
           cd renfe-bot
-          PYTHONPATH=./src python src/cli.py -o "$ORIGEN" -d "$DESTINO" --departure_date "$(echo $FECHAS | cut -d, -f1)"
+          PYTHONPATH=./src python src/cli.py -o Madrid -d Barcelona --departure_date 15/10/2026
 
       # La cache de Actions es inmutable por clave: se escribe con una clave
       # unica (run_id) y se recupera la mas reciente por prefijo.

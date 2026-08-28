@@ -10,10 +10,7 @@ on:
 concurrency:
   group: vigilante-renfe
   cancel-in-progress: false
-      - name: Depurar CLI
-        run: |
-          cd renfe-bot
-          PYTHONPATH=./src python src/cli.py -o "$ORIGEN" -d "$DESTINO" --departure_date "$(echo $FECHAS | cut -d, -f1)"
+
 jobs:
   vigilar:
     runs-on: ubuntu-latest
@@ -43,6 +40,14 @@ jobs:
 
       - name: Instalar navegador
         run: python -m playwright install --with-deps chromium
+
+      - name: Depurar CLI            # ← pegas este bloque entero aquí
+        run: |
+          cd renfe-bot
+          PYTHONPATH=./src python src/cli.py -o "$ORIGEN" -d "$DESTINO" --departure_date "$(echo $FECHAS | cut -d, -f1)"
+
+      - name: Recuperar estado anterior
+        uses: actions/cache/restore@v4
 
       # La caché de Actions es inmutable por clave: se escribe con una clave
       # unica (run_id) y se recupera la mas reciente por prefijo.

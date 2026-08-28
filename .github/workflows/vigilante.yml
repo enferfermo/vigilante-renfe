@@ -17,8 +17,8 @@ jobs:
     timeout-minutes: 10
 
     env:
-      ORIGEN: Madrid
-      DESTINO: Valladolid
+      ORIGEN: Puerto de Santa Maria
+      DESTINO: Madrid
       FECHAS: "12/09/2026,13/09/2026"
 
     steps:
